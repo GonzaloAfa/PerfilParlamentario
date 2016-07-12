@@ -1,0 +1,13 @@
+<div class="form-horizontal">
+	<label ng-if="calibers">{{label}}</label>
+	<div class="form-group">
+		<div ng-repeat="data in calibers" class='col-sm-2 text-center'>
+            <label>{{data.name}}</label>
+            <input ng-model="data.percentage"
+                ng-change="calculatePercentage()"
+                class="form-control col-sm-12"
+                placeholder="0%"
+                type="text"/>
+		</div>
+	</div>
+</div>
