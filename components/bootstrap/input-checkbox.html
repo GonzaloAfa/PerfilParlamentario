@@ -1,0 +1,13 @@
+<div class="form-group">
+	<label class="active">{{label}}</label>
+	<div class="input-group date">
+		<label ng-repeat="item in items">
+		  <input type="checkbox" 
+		  	data-checklist-model="itemSet" 
+		  	data-checklist-value="item"
+		  	ng-model="value"
+		  	ng-change="change"> 
+		  	{{item.name}}
+		</label>
+	</div>
+</div>
