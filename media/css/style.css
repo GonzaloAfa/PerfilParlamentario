@@ -94,3 +94,42 @@
   .navbar-right{
     margin-right: 5%;
   }
+
+/* Home */
+
+  .title{
+      margin-top: 10%;
+      margin-bottom: 20px;
+  }
+
+  .title h1{
+      color: white;
+  }
+
+  .title h3{
+      color: white;
+  }
+
+  .title h4{
+      color: white;
+  }
+
+  .header-bg{
+      background: url(/static/img/EnSala.png) no-repeat center center fixed;
+      min-height: 100%;
+  }
+
+  .default{
+      margin-top: 50px;
+      margin-bottom: 100px;
+  }
+
+  .logo-home{
+      width:  250px;
+      height: 200px;
+  }
+
+  .subtitle{
+      margin-top: -10px;
+      margin-bottom: 50px;
+  }
