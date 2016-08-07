@@ -97,7 +97,7 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = 'media'
 STATIC_URL = '/static/'
 
-PATH = '/home/memoria/www/'
+PATH = '/home/pparlamentario/www/'
 
 API_URL = "http://0.0.0.0:5050"
 
