@@ -1,0 +1,67 @@
+{% extends "perfil/base.html" %}
+
+{% load bootstrap %}
+
+{% block css%}
+{% endblock %}
+
+
+{% block container %}
+<div class="container">
+
+	<div class="col-md-12">
+
+		<h2>Diputados(as)</h2>
+		<table class="table table-striped">
+
+			<tr>
+				<td>Diputados</td>
+				<td>Sesion</td>
+				<td>Asistencia</td>
+				<td>Porcentaje</td>
+			</tr>
+
+			{% for asistencia in asistencias.diputados %}
+
+				<tr>
+					<td>
+						<a href="{% url 'perfilDiputado' parid=asistencia.parid %}">{{asistencia.apellido_paterno}} {{asistencia.apellido_materno}}, {{asistencia.nombre}}</a>
+					</td>
+					<td>{{asistencia.sesiones}}</td>
+					<td>{{asistencia.asistencias}}</td>
+					<td>{{asistencia.porcentaje_asistencia}}</td>
+				</tr>
+
+			{% endfor %}
+
+		</table>
+
+		<h2>Senadores(as)</h2>
+		<table class="table table-striped">
+
+			<tr>
+				<td>Senadores</td>
+				<td>Sesion</td>
+				<td>Asistencia</td>
+				<td>Porcentaje</td>
+			</tr>
+
+			{% for asistencia in asistencias.senadores %}
+
+				<tr>
+					<td>
+						<a href="">{{asistencia.apellido_paterno}} {{asistencia.apellido_materno}}, {{asistencia.nombre}} </a>
+					</td>
+					<td>{{asistencia.sesiones}}</td>
+					<td>{{asistencia.asistencias}}</td>
+					<td>{{asistencia.porcentaje_asistencia}}</td>
+				</tr>
+
+			{% endfor %}
+
+		</table>
+
+	</div>
+
+</div>
+{% endblock %}

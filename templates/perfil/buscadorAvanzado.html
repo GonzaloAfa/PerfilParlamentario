@@ -1,0 +1,58 @@
+{% extends "perfil/base.html" %}
+
+{% load bootstrap %}
+
+{% block css%}
+
+<style type="text/css">
+	
+	.foto {
+	  width: 250px;
+	  height: 333px;
+	}
+	
+
+</style>
+
+
+{% endblock %}
+
+{% block container 	%}
+<div class="container">
+	<div class="col-md-3">		
+	<h3>Categorías</h3>
+
+
+	<label for="parlamentario">Parlamentario</label>
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search">
+        <div class="input-group-btn">
+            <button type="submit" class="btn btn-default">
+                <span class="fa fa-search"></span>
+            </button>
+        </div>
+    </div>
+
+	<div class="form-group">
+	    <label for="parlamentario">Partido</label>
+	    <input type="text" class="form-control" id="parlamentario" placeholder="Ingresa su nombre acá">
+  	</div>
+  	<div class="form-group">
+	    <label for="parlamentario">Distrito</label>
+	    <input type="text" class="form-control" id="parlamentario" placeholder="Ingresa su nombre acá">
+  	</div>
+  	<div class="form-group">
+	    <label for="parlamentario">Circunscripción</label>
+	    <input type="text" class="form-control" id="parlamentario" placeholder="Ingresa su nombre acá">
+  	</div>
+
+
+
+
+	</div>
+
+	<div class="col-md-9">
+	<h3>Resultados</h3>
+	</div>
+</div>
+{% endblock %}

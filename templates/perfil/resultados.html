@@ -1,0 +1,61 @@
+{% extends "perfil/base.html" %}
+
+{% load bootstrap %}
+
+{% block css%}
+	<style type="text/css">
+		.foto {
+		  width: 250px;
+		  height: 333px;
+		}
+	</style>
+{% endblock %}
+
+{% block container 	%}
+<div class="container">
+	<div class="col-md-12 text-center">
+		<h2>{% for element in comuna %}
+				{{element.nombre}}
+			{% endfor %}
+		</h2>
+		<hr>
+		<h4>Parlamentarios que representan a los ciudadanos de la comuna</h4>
+		<br/>
+	</div>
+
+	<div class="col-xs-12 col-md-12">
+		{% for parlamentario in parlamentarios%}
+		<div class="col-xs-12 col-md-3 text-center">
+
+			{% if parlamentario.tipo == "diputado"%}
+				<a href="{% url 'perfilDiputado' parid=parlamentario.parid %}">
+					<img class="foto" src="{{parlamentario.foto}}" alt="{{parlamentario.nombre}} {{parlamentario.apellido}}">
+				</a>
+
+				<h4>
+					<a href="{% url 'perfilDiputado' parid=parlamentario.parid %}">
+						<strong>{{parlamentario.nombre}} {{parlamentario.apellido}}</a></strong>
+				</h4>
+				<h4>
+					<span class="label label-danger">Diputado(a)</span>
+				</h4>
+
+			{% elif parlamentario.tipo == "senador" %}
+				<a href="{% url 'perfilSenador' parid=parlamentario.parid %}">
+					<img class="foto" src="{{parlamentario.foto}}" alt="{{parlamentario.nombre}} {{parlamentario.apellido}}">
+				</a>
+				<h4>
+					<a href="{% url 'perfilSenador' parid=parlamentario.parid %}">
+						<strong>{{parlamentario.nombre}} {{parlamentario.apellido}}</a></strong>
+				</h4>
+				<h4>
+					<span class="label label-success">Senador(a)</span>
+				</h4>
+			{% endif %}
+			
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+{% endblock %}
