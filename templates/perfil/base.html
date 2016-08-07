@@ -163,10 +163,9 @@
 {% endblock%}
 
 <script type="text/javascript">
-
   $('#select-country').selectize();
   $('#select-country').on('change', function() {
-    window.location.href = "{{host_url}}/resultados/"+this.value;
+    window.location.href = "/resultados/"+this.value;
   })
 
 </script>
