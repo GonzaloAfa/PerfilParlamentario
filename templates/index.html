@@ -1,0 +1,487 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block css%}
+ <style type="text/css">
+
+	.panel-heading h4 {
+		color: white;
+		font-weight: bold;
+	}
+ </style>
+
+{% endblock %}
+
+
+
+{% block container 	%}
+	<div class="container">
+
+		<div class="col-md-12 base-container">
+
+			<div class="col-md-12">
+
+				<div class="col-md-9">
+					<h2>Panel de recolección de información</h2>
+					<hr>
+					<p>Para actualizar la información parlamentarias, puedes... </p>
+				</div>
+
+				<div class="col-md-3">
+					<div class="panel panel-warning">
+					  <div class="panel-heading text-center">Status</div>
+					  <div class="panel-body">
+
+					    	<div id="status-camara"></div>
+					    	<div id="status-senado"></div>
+					    	<div id="status-congreso"></div>
+					    	<div id="status-bcn"></div>
+
+					  </div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12">
+			<h3>Parlamentarios</h3>
+				<table class="table table-striped">
+					<tr>
+						<th>Detalle</th>
+						<th>Última actualizacion</th>
+						<th>Actualizar</th>
+					</tr>
+					<tr>
+						<td><a href="updateDiputados">Diputados - Vigentes</a></td>
+						<td>{{updateDiputados |date:"SHORT_DATE_FORMAT"}}</td>
+						<td><button type="button" class="btn btn-success" id="diputados">Vigentes</button></td>
+					</tr>
+					<tr>
+						<td><a href="updateAsistenciaDiputados">Diputados - Asistencia</a></td>
+						<td>{{updateAsistenciaDiputados |date:"SHORT_DATE_FORMAT"}}</td>
+						<td><button type="button" class="btn btn-success" id="diputados-asistencia">Asistencia</button></td>
+					</tr>
+					<tr>
+						<td><a href="updateComisionDiputados">Diputados - Comisiones</a></td>
+						<td>{{updateComisionesDiputados |date:"SHORT_DATE_FORMAT"}}</td>
+						<td><button type="button" class="btn btn-success" id="diputados-comisiones">Comisiones</button></td>
+					</tr>
+					<tr>
+						<td><a href="">Diputados - Foto</a></td>
+						<td></td>
+						<td><button type="button" class="btn btn-success" id="diputados-foto">Actualizar</button></td>
+					</tr>
+
+					<tr>
+						<td><a href="updateSenadores">Senadores - Vigentes</a></td>
+						<td>{{updateSenadores|date:"SHORT_DATE_FORMAT"}}</td>
+						<td><button type="button" class="btn btn-success" id="senadores">Vigentes</button></td>
+					</tr>
+					<tr>
+						<td><a href="updateAsistenciaSenadores">Senadores - Asistencia</a></td>
+						<td>{{updateAsistenciaSenadores|date:"SHORT_DATE_FORMAT"}}</td>
+						<td><button type="button" class="btn btn-success" id="senadores-asistencia">Asistencia</button></td>
+					</tr>
+					<tr>
+						<td><a href="updateComisionSenadores">Senadores - Comisiones</a></td>
+						<td>{{updateComisionesSenadores|date:"SHORT_DATE_FORMAT"}}</td>
+						<td><button type="button" class="btn btn-success" id="senadores-comisiones">Comisiones</button></td>
+					</tr>
+
+					<tr>
+						<td><a href="updateFotoSenadores">Senadores - Foto</a></td>
+						<td></td>
+						<td><button type="button" class="btn btn-success" id="senadores-foto">Actualizar</button></td>
+					</tr>
+
+
+				</table>
+			</div>
+
+
+			<div class="col-md-12">
+				<h3>Votaciones</h3>
+				<table class="table table-striped">
+					<tr>
+						<th>Detalle</th>
+						<th>Último registro</th>
+						<th>Actualizar</th>
+					</tr>
+					<tr>
+						<td>
+              <a href="/listVotaciones">Cámara - Listado de votaciones</a>
+            </td>
+						<td>{{salaVotacionesCamara}}</td>
+						<td><button type="button" class="btn btn-success" id="camara-listado">Listado</button></td>
+					</tr>
+					<tr>
+						<td>
+              <a href="/votacionCamara">Cámara - Detalle votación</a>
+            </td>
+						<td>{{votacionCamara}}</td>
+						<td><button type="button" class="btn btn-success" id="camara-detalle">Detalle</button></td>
+					</tr>
+					<tr>
+						<td>
+              <a href="/votacionSalaSenado">Senado - Listado de votaciones</a>
+            </td>
+						<td>{{salaVotacionesSenado}}</td>
+						<td><button type="button" class="btn btn-success" id="senado-listado">Listado</button></td>
+					</tr>
+					<tr>
+						<td>
+              <a href="/votosSenado">Senado - Detalle votación</a>
+            </td>
+						<td>{{votacionSenado}}</td>
+						<td><button type="button" class="btn btn-success" id="senado-detalle">Detalle</button></td>
+					</tr>
+					<tr>
+						<td>
+              <a href="/updateBoletines">Boletín</a>
+            </td>
+						<td> - </td>
+						<td><button type="button" class="btn btn-success" id="boletin">Actualizar</button></td>
+					</tr>
+          <tr>
+						<td>
+              <a href="/historicBulletin">Históricos</a>
+            </td>
+						<td> - </td>
+						<td><button type="button" class="btn btn-success" id="historic-bulletin">Actualizar</button></td>
+					</tr>
+
+
+				</table>
+			</div>
+
+
+		</div>
+	</div>
+
+
+<script type="text/javascript">
+
+
+ 	$('#diputados').on('click', function () {
+ 		$('#diputados').removeClass("btn btn-success").addClass( "btn btn-danger" );
+ 		$('#diputados').text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'updateDiputados' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#diputados').removeClass("btn btn-danger").addClass( "btn btn-info" );
+		 		$('#diputados').text('Actualizado');
+		 		$('#diputados').attr("disabled", true);
+           	}
+        });
+    });
+
+
+ 	$('#diputados-asistencia').on('click', function () {
+ 		$('#diputados-asistencia').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'updateAsistenciaDiputados' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#diputados-asistencia').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#diputados-asistencia').attr("disabled", true);
+           	}
+        });
+    });
+
+ 	$('#diputados-comisiones').on('click', function () {
+ 		$('#diputados-comisiones').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'updateComisionDiputados' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#diputados-comisiones').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#diputados-comisiones').attr("disabled", true);
+
+           	}
+        });
+    });
+
+
+ 	$('#senadores').on('click', function () {
+ 		$('#senadores').removeClass("btn btn-success").addClass( "btn btn-danger" );
+ 		$('#senadores').text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'updateSenadores' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#senadores').removeClass("btn btn-danger").addClass( "btn btn-info" );
+		 		$('#senadores').text('Actualizado');
+		 		$('#senadores').attr("disabled", true);
+           	}
+        });
+    });
+
+
+ 	$('#senadores-asistencia').on('click', function () {
+ 		$('#senadores-asistencia').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'updateAsistenciaSenadores' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#senadores-asistencia').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#senadores-asistencia').attr("disabled", true);
+           	}
+        });
+    });
+
+ 	$('#senadores-comisiones').on('click', function () {
+ 		$('#senadores-comisiones').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'updateComisionSenadores' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#senadores-comisiones').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#senadores-comisiones').attr("disabled", true);
+
+           	}
+        });
+    });
+
+
+
+ 	$('#camara-listado').on('click', function () {
+ 		$('#camara-listado').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'listVotaciones' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#camara-listado').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#camara-listado').attr("disabled", true);
+
+           	}
+        });
+    });
+
+
+ 	$('#camara-detalle').on('click', function () {
+ 		$('#camara-detalle').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'votacionCamara' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#camara-detalle').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#camara-detalle').attr("disabled", true);
+
+           	}
+        });
+    });
+
+ 	$('#senado-listado').on('click', function () {
+ 		$('#senado-listado').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'votacionSalaSenado' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#senado-listado').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#senado-listado').attr("disabled", true);
+
+           	}
+        });
+    });
+
+ 	$('#senado-detalle').on('click', function () {
+ 		$('#senado-detalle').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'votosSenado' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#senado-detalle').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#senado-detalle').attr("disabled", true);
+
+           	}
+        });
+    });
+
+ 	$('#boletin').on('click', function () {
+ 		$('#boletin').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'updateBoletines' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#boletin').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#boletin').attr("disabled", true);
+
+           	}
+        });
+    });
+
+    $('#historic-bulletin').on('click', function () {
+   		$('#historic-bulletin').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+          $.ajax({
+              data    : "",
+              url     : "{% url 'historicBulletin' %}",
+              type    : 'get',
+              success : function(data){
+  		 		$('#historic-bulletin').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+  		 		$('#historic-bulletin').attr("disabled", true);
+
+             	}
+          });
+      });
+
+ 	$('#diputados-foto').on('click', function () {
+ 		$('#diputados-foto').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'updateFotoDiputados' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#diputados-foto').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#diputados-foto').attr("disabled", true);
+
+           	}
+        });
+    });
+ 	$('#senadores-foto').on('click', function () {
+ 		$('#senadores-foto').removeClass("btn btn-success").addClass( "btn btn-danger" ).text('Ejecutando...');
+
+        $.ajax({
+            data    : "",
+            url     : "{% url 'updateFotoSenadores' %}",
+            type    : 'get',
+            success : function(data){
+		 		$('#senadores-foto').removeClass("btn btn-danger").addClass( "btn btn-info" ).text('Actualizado');
+		 		$('#senadores-foto').attr("disabled", true);
+
+           	}
+        });
+    });
+
+
+
+function status_camara(){
+
+	$.ajax({
+		type: "GET",
+	    data: {'host' : 'camara.cl'},
+	    url:  "{% url 'statusServer' %}",
+
+	    success: function(data){
+
+	    	if (data == 200){
+		    	$('#status-camara').html('<i class="fa fa-thumbs-o-up"></i> <a href="http://www.camara.cl">Camara.cl</a>');
+	    	}
+	    	else{
+		    	$('#status-camara').html('<i class="fa fa-times-circle"></i> <a href="http://www.camara.cl">Camara.cl</a>');
+	    	}
+	    },
+	    error: function(xhr, statusText, errorThrown){
+		    	$('#status-camara').html('<i class="fa fa-times-circle"></i> <a href="http://www.camara.cl">Camara.cl</a>');
+	    }});
+
+}
+
+
+function status_senado(){
+
+	$.ajax({
+		type: "GET",
+	    data: {'host' : 'www.senado.cl'},
+	    url:  "{% url 'statusServer' %}",
+
+	    success: function(data){
+
+	    	if (data == 200){
+		    	$('#status-senado').html('<i class="fa fa-thumbs-o-up"></i> <a href="http://www.senado.cl">Senado.cl</a>');
+	    	}
+	    	else{
+		    	$('#status-senado').html('<i class="fa fa-times-circle"></i> <a href="http://www.senado.cl">Senado.cl</a>');
+	    	}
+	    },
+	    error: function(xhr, statusText, errorThrown){
+		    $('#status-senado').html('<i class="fa fa-times-circle"></i> <a href="http://www.senado.cl">Senado.cl</a>');
+
+	    }});
+
+}
+
+function status_congreso(){
+
+	$.ajax({
+		type: "GET",
+	    data: {'host' : 'opendata.congreso.cl'},
+	    url:  "{% url 'statusServer' %}",
+
+	    success: function(data){
+
+	    	if (data == 200){
+		    	$('#status-congreso').html('<i class="fa fa-thumbs-o-up"></i> <a href="http://opendata.congreso.cl">Opendata.congreso.cl</a>');
+	    	}
+	    	else{
+		    	$('#status-congreso').html('<i class="fa fa-times-circle"></i> <a href="http://opendata.congreso.cl">Opendata.congreso.cl</a>');
+	    	}
+	    },
+	    error: function(xhr, statusText, errorThrown){
+		    	$('#status-congreso').html('<i class="fa fa-times-circle"></i> <a href="http://opendata.congreso.cl">Opendata.congreso.cl</a>');
+	    }});
+
+}
+
+function status_bcn(){
+
+	$.ajax({
+		type: "GET",
+	    data: {'host' : 'historiapolitica.bcn.cl'},
+	    url:  "{% url 'statusServer' %}",
+
+	    success: function(data){
+
+	    	if (data == 200){
+		    	$('#status-bcn').html('<i class="fa fa-thumbs-o-up"></i> <a href="http://historiapolitica.bcn.cl">Historiapolitica.bcn.cl</a>');
+	    	}
+	    	else{
+		    	$('#status-bcn').empty();
+		    	$('#status-bcn').append('<i class="fa fa-times-circle"></i> <a href="http://historiapolitica.bcn.cl">Historiapolitica.bcn.cl</a>');
+	    	}
+	    },
+	    error: function(xhr, statusText, errorThrown){
+		    $('#status-bcn').empty();
+		    $('#status-bcn').append('<i class="fa fa-times-circle"></i> <a href="http://historiapolitica.bcn.cl">Historiapolitica.bcn.cl</a>');
+
+	    }});
+
+}
+
+
+function status(){
+	status_camara();
+	status_senado();
+	status_congreso();
+	status_bcn();
+}
+
+$( document ).ready( status );
+
+</script>
+
+
+{% endblock %}
