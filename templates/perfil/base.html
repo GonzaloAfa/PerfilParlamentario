@@ -27,6 +27,9 @@
   <link rel="stylesheet" href="{{STATIC_URL}}css/selectize.bootstrap3.css">
 	<link rel="stylesheet" href="{{STATIC_URL}}css/style.css">
 
+	{% block css%}
+
+	{% endblock %}
 
 	<script src="{{STATIC_URL}}js/jquery-1.10.2.min.js"></script>
   <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
@@ -64,9 +67,6 @@
 	}(document, 'script', 'facebook-jssdk'));
 </script>
 
-	{% block css%}
-
-	{% endblock %}
 </head>
 <body>
 
