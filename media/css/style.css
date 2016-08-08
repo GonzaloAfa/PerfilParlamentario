@@ -115,8 +115,9 @@
   }
 
   .header-bg{
-      background: url(/static/img/EnSala.png) no-repeat center center fixed;
-      min-height: 100%;
+    min-height: 600px;
+    background: url(/static/img/EnSala.png) no-repeat center;
+    background-size: cover;
   }
 
   .default{
