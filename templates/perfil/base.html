@@ -1,0 +1,175 @@
+<html lang='es'>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Perfil Parlamentario | Mostramos lo que hacen los diputados y senadores de Chile</title>
+
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@pparlamentario" />
+
+	{% block meta %}
+	<meta property="og:title" content="Perfil Parlamentario" />
+	<meta property="og:description" content="Mostramos lo que hacen los diputados y senadores de Chile dentro del Parlamento." />
+	<meta property="og:image" content="http://perfilparlamentario.info/static/img/logo.png" />
+	<meta property="og:url" content="http://perfilparlamentario.info" />
+
+	<meta name=”twitter:title” content="Perfil Parlamentario"/>
+	<meta name=”twitter:description” content="Mostramos lo que hacen los diputados y senadores de Chile dentro del Parlamento."/>
+	<meta name="twitter:image" content="http://perfilparlamentario.info/static/img/logo.png" />
+	<meta name=”twitter:image:src” content="http://perfilparlamentario.info/static/img/logo.png"/>
+	{% endblock %}
+
+	<meta property="og:site_name" content="PerfilParlamentario" />
+
+
+	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.simplex.min.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}css/selectize.bootstrap3.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}css/style.css">
+
+	{% block css%}
+
+	{% endblock %}
+
+	<script src="{{STATIC_URL}}js/jquery-1.10.2.min.js"></script>
+  <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+  <script src="{{STATIC_URL}}js/easypiechart.js"></script>
+  <script src="{{STATIC_URL}}js/jquery-ui.js"></script>
+  <script src="{{STATIC_URL}}js/selectize.js"></script>
+
+<script type="text/javascript">
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-80633719-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<script type="text/javascript">
+	!function(d,s,id){
+	var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+	if(!d.getElementById(id)){
+		js=d.createElement(s);js.id=id;
+		js.src=p+'://platform.twitter.com/widgets.js';
+		fjs.parentNode.insertBefore(js,fjs);}}(
+			document, 'script', 'twitter-wjs');
+</script>
+
+<script type="text/javascript">
+	(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v2.7&appId=341318245972361";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+</script>
+
+</head>
+<body>
+
+{% block navbar %}
+<!-- NavBar -->
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+        <section class="logo col-md-2" >
+          <a href="{% url 'home' %}">
+            <img src="{{STATIC_URL}}img/Logo-Menu.png">
+          </a>
+        </section>
+        {% block buscador %}
+        <!-- ************** Country Selector Demo ************** -->
+
+
+        <section class="demo col-md-3" >
+          <div class="sandbox">
+            <select id="select-country" class="demo-default" placeholder="Escriba su comuna">
+                <option value="">Escriba su comuna</option>
+
+                {% for comuna in lista_comunas %}
+                  <option value="{{comuna.id}}">{{comuna.nombre}}</option>
+                {% endfor %}
+
+            </select>
+          </div>
+        </section>
+        {% endblock %}
+
+      <ul class="nav navbar-nav navbar-right">
+<!--          <li>
+              <a class="page-scroll" href="{% url 'busquedaAvanzada' %}">Buscador avanzado</a>
+          </li>
+-->
+          <li>
+              <a class="page-scroll" href="{% url 'assistance' %}">Asistencia</a>
+          </li>
+					<li>
+						<a class="page-scroll" href="{% url 'about' %}">Nosotros</a>
+					</li>
+      </ul>
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+{% endblock %}
+
+
+
+
+    <!-- Navbar -->
+	{% block container %}
+	{% endblock %}
+
+
+{% block footer %}
+  <footer>
+      <div class="text-center">
+      <hr>
+			<strong>Nuestras redes:</strong>
+				<a href="https://twitter.com/PParlamentario"
+					class="twitter-follow-button"
+					data-show-count="false"
+					data-lang="es">
+					Seguir a @PParlamentario
+				</a>
+				<a class="fb-like"
+					data-href="https://www.facebook.com/PerfilParlamentario/"
+					data-width="400" data-layout="button_count"
+					data-action="like" data-size="small" data-show-faces="false" data-share="true">
+				</a>
+        <p>Desarrollado por <a href="https://www.twitter.com/GonzaloAfa">@GonzaloAfa</a>, utilizando Django, Bootstrap, Jquery y mucha, mucha cafeína | 2016</p>
+      </div>
+  </footer>
+{% endblock %}
+
+
+{% block js %}
+{% endblock%}
+
+<script type="text/javascript">
+  $('#select-country').selectize();
+  $('#select-country').on('change', function() {
+    window.location.href = "/resultados/"+this.value;
+  })
+
+</script>
+
+</body>
+
+</html>

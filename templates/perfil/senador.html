@@ -1,0 +1,482 @@
+{% extends "perfil/base.html" %}
+
+{% load bootstrap %}
+
+{% block meta %}
+	<meta property="og:title" content="Perfil de {{data.senador.nombre}} {{data.senador.apellido_paterno}}  {{data.senador.apellido_materno}}" />
+	<meta property="og:description" content="Entra a PerfilParlamentario y revisa el historial de las votaciones de los parlamentarios que representan a tu sector" />
+	<meta property="og:image" content="{{data.senador.foto}}" />
+	<meta property="og:url" content="http://perfilparlamentario.info/senador/perfil/{{data.senador.parid}}" />
+
+	<meta name=”twitter:title” content="Perfil de {{data.senador.nombre}} {{data.senador.apellido_paterno}}  {{data.senador.apellido_materno}}"/>
+	<meta name=”twitter:description” content="Entra a PerfilParlamentario y revisa el historial de las votaciones de los parlamentarios que representan a tu sector"/>
+	<meta name=”twitter:image” content="{{data.senador.foto}}"/>
+	<meta name=”twitter:image:src” content="{{data.senador.foto}}"/>
+	<meta name=”twitter:site” content="http://perfilparlamentario.info/senador/perfil/{{data.senador.parid}}"/>
+{% endblock %}
+
+
+{% block css%}
+
+<style type="text/css">
+
+	.chart {
+	  position: relative;
+	  display: inline-block;
+	  width: 100;
+	  height: 100px;
+	  text-align: center;
+	}
+	.chart canvas {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	}
+	.percent {
+	  display: inline-block;
+	  line-height: 100px;
+	  z-index: 2;
+	}
+	.percent:after {
+	  content: '%';
+	  margin-left: 0.1em;
+	  font-size: .8em;
+	}
+
+	.indicadores{
+		font-size: 45px;
+		height: 65px;
+		margin: 20px;
+	}
+	.foto-congresista{
+		height:	333px;
+		width: 	250px;
+
+	}
+
+</style>
+{% endblock %}
+
+
+{% block container %}
+<div class="container">
+
+	<div class="col-md-12">
+		<h1>{{data.senador.nombre}} {{data.senador.apellido_paterno}}  {{data.senador.apellido_materno}}
+			<small>{{data.senador.militancia}} - {{data.senador.circunscripcion}}</small></h1>
+		<hr>
+	</div>
+
+	<div class="col-md-12">
+
+		<div class="col-md-4 text-center">
+			<div class="col-md-12">
+				<img class="foto-congresista" src="{{data.senador.foto}}">
+			</div>
+
+			<div class="col-md-12 text-center">
+	            <p><i class="glyphicon glyphicon-envelope"></i> <a href="mailto:{{data.senador.email}}">{{data.senador.email}}</a>
+	            </p>
+        		<p>Más información sobre el Senador: <br/>
+        		<a href="{{data.senador.url}}">Biografía de {{data.senador.nombre}} {{data.senador.apellido_paterno}}</a></p>
+        	</div>
+
+		</div>
+
+		<div class="col-md-8">
+
+			<div class="col-md-6">
+
+				<h3>Indicadores</h3>
+
+				<div class="col-md-6 text-center">
+
+					<div class="asistencia chart " data-percent="{{data.asistencia.porcentaje_asistencia}}">
+						<span class="percent"></span>
+					</div>
+					<h4>Asistencia</h4>
+				</div>
+
+				<div class="col-md-6 text-center">
+
+					<div class="indicadores">{{data.nProyectos}}</div>
+
+					<h4>Proyectos presentados</h4>
+				</div>
+
+			</div>
+
+			<div class="col-md-6">
+				<h3>Comisiones donde trabaja:</h3>
+
+				<ul>
+					{% for element in data.comision %}
+
+						{% if element.tipo == "Permanente" %}
+							<li>Comisión {{element.nombre}} </li>
+						{% else %}
+							<li>{{element.nombre}} </li>
+						{% endif %}
+
+					{% endfor %}
+				</ul>
+
+
+			</div>
+
+
+		</div>
+
+		<div class="col-md-8">
+			<div class="col-md-6">
+				<h3>Comunas que representa</h3>
+
+				{% for element in data.comunas %}
+					- {{element.nombre}}
+				{% endfor %}
+			</div>
+			<div class="col-md-6">
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-12">
+		<div class="col-md-6">
+			<h2>Últimas votaciones</h2>
+		</div>
+		<div class="col-md-6">
+			<div class="col-md-2 text-center">
+				<strong>Simbología:</strong>
+			</div>
+			<div class="col-md-2 text-center">
+				<img src="{{STATIC_URL}}img/aprobar.png" alt="Aprueba"> <br/>
+				Aprueba
+			</div>
+			<div class="col-md-2 text-center">
+				<img src="{{STATIC_URL}}img/rechazo.png" alt="Rechaza"> <br/>
+				Rechaza
+			</div>
+			<div class="col-md-2 text-center">
+				<img src="{{STATIC_URL}}img/abstencion.png" alt="Se abstiene"><br/>
+				Abstención
+			</div>
+			<div class="col-md-2 text-center">
+				<img src="{{STATIC_URL}}img/inasistente.png" alt="No vota"><br/>
+				Inasistente
+			</div>
+			<div class="col-md-2 text-center">
+				<img src="{{STATIC_URL}}img/pareo.png" alt="No vota"><br/>
+				Pareo
+			</div>
+		</div>
+
+		<div class="col-md-12">
+		<hr>
+		<table class="table">
+
+			<thead>
+			<td>
+				<div class="col-md-12">
+					<div class="col-md-11">
+						<div class="col-md-2 text-right">
+							<strong>Fecha</strong>
+						</div>
+
+						<div class="col-md-10">
+							<div>
+								<strong>Proyecto</strong>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1 text-center">
+						<strong>Voto</strong>
+					</div>
+				</div>
+				</td>
+			</thead>
+			{% for votos in data.ultimasVotaciones %}
+			<tr>
+				<td>
+				<div class="col-md-12">
+					<div class="col-md-11">
+						<div class="col-md-2 text-right">
+							<a href="http://www.senado.cl/appsenado/index.php?mo=sesionessala&ac=detalleVotacion&votaid={{votos.idVotacion}}">{{votos.fecha}}</a>
+						</div>
+
+						<div class="col-md-10">
+							<div>
+								{{votos.titulo}}
+							</div>
+							<div>
+								<small><a href="http://www.senado.cl/appsenado/templates/tramitacion/index.php?boletin_ini={{votos.boletin}}">Boletín {{votos.boletin}}</a></small>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1 text-center">
+						{% if votos.opcion == "Aprueba" %}
+							<img src="{{STATIC_URL}}img/aprobar.png" alt="Aprueba">
+						{% elif votos.opcion == "Rechaza" %}
+							<img src="{{STATIC_URL}}img/rechazo.png" alt="Rechaza">
+						{% elif votos.opcion == "Abstencion" %}
+							<img src="{{STATIC_URL}}img/abstencion.png" alt="Abstencion">
+						{% elif votos.opcion == "Pareo" %}
+							<img src="{{STATIC_URL}}img/pareo.png" alt="Pareo">
+						{% elif votos.opcion == "Sin votacion" %}
+							<img src="{{STATIC_URL}}img/inasistente.png" alt="No vota">
+						{% else %}
+							{{votos.opcion}}
+						{% endif%}
+					</div>
+				</div>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+
+		</div>
+	</div>
+
+	<div class="col-md-12">
+		<div class="col-md-12">
+		<h2>Nivel de apoyo a ciertos proyectos de ley</h2>
+		<hr>
+		</div>
+
+		<div class="col-md-12">
+
+			{% for element in data.nivelApoyo %}
+
+				{% if forloop.counter0|divisibleby:3 %}
+					</div>
+					<div class="col-md-12">
+				{% endif %}
+
+
+			<div class="col-md-4 text-center">
+
+				{% if element.apoyo > 75 %}
+				<div class="panel panel-success">
+				{% elif element.apoyo > 25 %}
+				<div class="panel panel-danger">
+				{% else %}
+				<div class="panel panel-primary">
+				{% endif %}
+
+
+
+
+				  <div class="panel-body">
+				    <h4><a href="http://www.senado.cl/appsenado/templates/tramitacion/index.php?boletin_ini={{element.idBoletin}}">{{element.nombre}}</a></h4>
+				    <button type="button" class="btn btn-default btn-xs" data-toggle="modal"
+							data-target="#boletin-{{element.idBoletin}}">
+								Detalle
+							</button>
+				  </div>
+				  <div class="panel-heading">
+
+					{% if element.apoyo > 75 %}
+						Alto Apoyo
+					{% elif element.apoyo > 25 %}
+						Mediano apoyo
+					{% else %}
+						Bajo apoyo
+					{% endif %}
+				  </div>
+				</div>
+
+
+
+			</div>
+
+			{% endfor %}
+		</div>
+	</div>
+
+</div>
+
+<script>
+window.onload = function() {
+
+    var asistencia = document.querySelector('.asistencia');
+    new EasyPieChart(asistencia, {
+			// activo la animación y establezco su duración a un segundo -->
+			animate: ({ duration: 1000,
+						enabled: true }),
+			// aumento la longitud de las lineas de la gráfica -->
+			scaleLength:10,
+			// aumento el tamaño de la gráfica -->
+			size:100,
+			// añado el número del porcentaje que se muestra en el span -->
+			onStep: function(from, to, percent) {
+				this.el.children[0].innerHTML = Math.round(percent);
+			}
+    });
+
+}
+
+</script>
+
+{% for element in data.nivelApoyo %}
+	<!-- Modal -->
+	<div class="modal fade" id="boletin-{{element.idBoletin}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header text-center">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Boletín {{element.idBoletin}}</h4>
+	      </div>
+	      <div class="modal-body">
+		      <p class="text-center">{{element.titulo}}</p>
+
+		      <table class="table table-striped">
+		      	<tr>
+		      		<td>Fecha</td>
+		      		<td class="text-center"><strong>Tipo votación</strong></td>
+		      		<td><strong>Opción</strong></td>
+		      		<td><strong>Enlace</strong></td>
+		      	</tr>
+
+				{% for subelement in element.analisisBoletin %}
+					<tr>
+			      		<td>{{subelement.fecha}}</td>
+
+			      		<td class="text-center">
+			      		{{subelement.informe}}
+			      		</td>
+
+			      		<td>
+							{% if subelement.opcion == "Aprueba" %}
+								<img src="{{STATIC_URL}}img/aprobar.png" alt="Aprueba">
+							{% elif subelement.opcion == "Rechaza" %}
+								<img src="{{STATIC_URL}}img/rechazo.png" alt="Rechaza">
+							{% elif subelement.opcion == "Abstencion" %}
+								<img src="{{STATIC_URL}}img/abstencion.png" alt="Se abstiene">
+							{% elif subelement.opcion == "Sin votacion" %}
+								<img src="{{STATIC_URL}}img/inasistente.png" alt="No vota">
+							{% elif subelement.opcion == "Pareo" %}
+								<img src="{{STATIC_URL}}img/pareo.png" alt="No vota">
+							{% endif%}
+			      		</td>
+
+			      		<td><a href="http://www.senado.cl/appsenado/index.php?mo=sesionessala&ac=detalleVotacion&votaid=={{subelement.idVotacion}}">Ver</a></td>
+			      	</tr>
+				{% endfor %}
+
+		      </table>
+
+
+	      </div>
+	    </div>
+	  </div>
+	</div>
+{% endfor %}
+
+<!-- Modal -->
+<div class="modal fade" id="pareo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Pareo</h4>
+      </div>
+      <div class="modal-body">
+        <p>Es un acuerdo entre dos Senadors, de distintos Comités, a través del cual durante un plazo determinado, se comprometen a no participar en ninguna votación si uno de ellos está ausente.</p>
+        <p>Fuente: <a href="http://www.camara.cl/glosario.aspx#pareo">Camara.cl</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="tipo-votacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Tipos de discusión</h4>
+      </div>
+      <div class="modal-body">
+
+				<strong>Discusión General</strong>
+				<p>Tiene por objeto admitir o desechar en su totalidad el proyecto, considerando sus ideas fundamentales o matrices contenidas en el Mensaje o Moción, según corresponda, y admitir a tramitación las indicaciones que presenten el Presidente de la República y los Diputados.</p>
+
+				<strong>Discusión Inmediata</strong>
+				<p>Plazo de 3 días para el despacho total de un proyecto de ley en ambas cámaras.</p>
+
+				<strong>Discusión Particular</strong>
+				<p>Tiene por objeto examinar un proyecto en sus detalles y por artículos.</p>
+
+				<strong>Discusión Única</strong>
+				<p>Es aquella en que el proyecto se discute en general y en particular a la vez. No tiene segundo informe y las indicaciones se votan una vez aprobado en general el proyecto.</p>
+
+        <p>Fuente: <a href="http://www.camara.cl/glosario.aspx#discusiongeneral">Camara.cl</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="discusion-general" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Discusión General</h4>
+      </div>
+      <div class="modal-body">
+
+		<strong>Discusión General</strong>
+		<p>Tiene por objeto admitir o desechar en su totalidad el proyecto, considerando sus ideas fundamentales o matrices contenidas en el Mensaje o Moción, según corresponda, y admitir a tramitación las indicaciones que presenten el Presidente de la República y los Diputados.</p>
+
+        <p>Fuente: <a href="http://www.camara.cl/glosario.aspx#discusiongeneral">Camara.cl</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="discusion-particular" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Discusión particular</h4>
+      </div>
+      <div class="modal-body">
+
+		<strong>Discusión Particular</strong>
+		<p>Tiene por objeto examinar un proyecto en sus detalles y por artículos.</p>
+
+        <p>Fuente: <a href="http://www.camara.cl/glosario.aspx#discusionparticular">Camara.cl</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="discusion-unica" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Discusión única</h4>
+      </div>
+      <div class="modal-body">
+      	<strong>Discusión única</strong>
+		<p>Es aquella en que el proyecto se discute en general y en particular a la vez. No tiene segundo informe y las indicaciones se votan una vez aprobado en general el proyecto.</p>
+        <p>Fuente: <a href="http://www.camara.cl/glosario.aspx#discusionunica">Camara.cl</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
